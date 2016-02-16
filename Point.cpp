@@ -84,7 +84,7 @@ namespace Clustering {
         }
 
         for (int i = 0; i < __dim; i++) {
-
+            distance += pow(())
         }
     }
 
