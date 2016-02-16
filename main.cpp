@@ -31,6 +31,8 @@ int main() {
 
     // point tests
     test_point_smoketest(ec);
+/*    Uncomment and test as you code
+
     test_point_id(ec, NumIters);
     test_point_getsetelem(ec, NumIters);
     test_point_copying(ec, NumIters);
@@ -55,5 +57,6 @@ int main() {
     test_cluster_SAO(ec, NumIters);
     test_cluster_IO(ec, NumIters);
 
+ */
     return 0;
 }
