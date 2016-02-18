@@ -46,7 +46,8 @@ namespace Clustering {
     }
 
     // Operator Overload (Testing address)
-    Point::Point &operator=(const Point &) {
+    bool Point::Point &operator=(const Point &p) {
+        __dim = p.getDims();
 
     }
 
@@ -79,41 +80,104 @@ namespace Clustering {
         double distance = 0;
 
         if(__dim != p.getDims()) {
-            std::cout << "Points have different dimensions, cannot compute distance." << endl;
+            std::cout << "Points have different dimensions, cannot compute distance." << std::endl;
             return 0;
         }
 
         for (int i = 0; i < __dim; i++) {
-            distance += pow(())
+            distance += pow((p.getValue(i) - __values[i]), 2);
         }
     }
 
 // Overloaded operators
 
 // Members
-Point &operator*=(double); // p *= 6; p.operator*=(6);
-Point &operator/=(double);
-const Point operator*(double) const; // prevent (p1 * 2) = p2;
-const Point operator/(double) const; // p3 = p2 / 2;
+    Point &Point::operator*=(double factor) { // p *= 6; p.operator*=(6);
+        for(int i = 0; i < __dim; i++) {
+            __values[i] *= factor;
+        }
+        return *this;
+    }
 
-double &operator[](int index);
+    Point &Point::operator/=(double divisor) {
+        if(divisor != 0) {
+            for (int i = 0; i < __dim; i++) {
+                __values[i] /= divisor;
+            }
+        }
+        return *this;
+    }
+
+    const Point Point::operator*(double factor) const { // prevent (p1 * 2) = p2;
+            return Point(*this) *= factor;
+    }
+
+    const Point Point::operator/(double divisor) const { // p3 = p2 / 2;
+        return Point(*this) /= divisor;
+    }
+
+    double &Point::operator[](int index) {
+        return __values[index];
+    }
 
 // Friends
-friend Point &operator+=(Point &, const Point &);
-friend Point &operator-=(Point &, const Point &);
-friend const Point operator+(const Point &, const Point &);
-friend const Point operator-(const Point &, const Point &);
+    Point &operator+=(Point &lhs, const Point &rhs) {
+        if (&lhs == &rhs) {
+            return lhs *= 2;
+        } else if (lhs.__dim == rhs.__dim) {
+            for (int i = 0; i < lhs.__dim; i++)
+                lhs.__values[i] += rhs.__values[i];
+        }
+        return lhs;
+    }
 
-friend bool operator==(const Point &, const Point &);
-friend bool operator!=(const Point &, const Point &);
+    Point &operator-=(Point &lhs, const Point &rhs) {
 
-friend bool operator<(const Point &, const Point &);
-friend bool operator>(const Point &, const Point &);
-friend bool operator<=(const Point &, const Point &);
-friend bool operator>=(const Point &, const Point &);
+    }
 
-friend std::ostream &operator<<(std::ostream &, const Point &);
-friend std::istream &operator>>(std::istream &, Point &);
+    const Point operator+(const Point &lhs, const Point &rhs) {
+        Point p(lhs);
+        return p += rhs;
+    }
+
+    const Point operator-(const Point &lhs, const Point &rhs) {
+
+    }
+
+
+    bool operator==(const Point &lhs, const Point &rhs) {
+
+    }
+
+    bool operator!=(const Point &lhs, const Point &rhs) {
+
+    }
+
+
+    bool operator<(const Point &lhs, const Point &rhs) {
+
+    }
+
+    bool operator>(const Point &lhs, const Point &rhs) {
+
+    }
+
+    bool operator<=(const Point &lhs, const Point &rhs) {
+
+    }
+
+    bool operator>=(const Point &lhs, const Point &rhs) {
+
+    }
+
+
+    std::ostream &operator<<(std::ostream &, const Point &) {
+
+    }
+
+    std::istream &operator>>(std::istream &, Point &) {
+
+    }
 
 
 }
