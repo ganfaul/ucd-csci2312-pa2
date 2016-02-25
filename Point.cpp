@@ -87,6 +87,9 @@ namespace Clustering {
         for (int i = 0; i < __dim; i++) {
             distance += pow((p.getValue(i) - __values[i]), 2);
         }
+
+        distance = sqrt(distance);
+        return distance;
     }
 
 // Overloaded operators
