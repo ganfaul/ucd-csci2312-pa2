@@ -3,15 +3,11 @@
 //
 
 #include<iostream>
-#include<cmath>
+#include <cmath>
 #include<sstream>
 
 using std::sqrt;
 using std::pow;
-using std::string;
-using std::stringstream;
-using std::stod;
-
 
 #include"Point.h"
 namespace Clustering {
@@ -158,21 +154,25 @@ namespace Clustering {
 
     // Friends
     Point &operator+=(Point &lhs, const Point &rhs) {
-        if (&lhs == &rhs) {
+        if (&lhs != &rhs) {
+            if (lhs.__dim == rhs.__dim) {
+                for (int i = 0; i < lhs.__dim; i++)
+                    lhs.__values[i] += rhs.__values[i];
+            }
+        } else {
             return lhs *= 2;
-        } else if (lhs.__dim == rhs.__dim) {
-            for (int i = 0; i < lhs.__dim; i++)
-                lhs.__values[i] += rhs.__values[i];
         }
         return lhs;
     }
 
     Point &operator-=(Point &lhs, const Point &rhs) {
-        if (&lhs == &rhs) {
+        if (&lhs != &rhs) {
+            if (lhs.__dim == rhs.__dim) {
+                for (int i = 0; i < lhs.__dim; i++)
+                    lhs.__values[i] -= rhs.__values[i];
+            }
+        } else {
             return lhs /= 2;
-        } else if (lhs.__dim == rhs.__dim) {
-            for (int i = 0; i < lhs.__dim; i++)
-                lhs.__values[i] -= rhs.__values[i];
         }
         return lhs;
     }
@@ -256,20 +256,15 @@ namespace Clustering {
     }
 
     std::istream &operator>>(std::istream &in, Point &p) {
-        int i = 0;
-        string pointString;
-        string characters;
         double value;
-        while(getline(in, pointString)) {
-            stringstream inputStringStream(pointString);
-            while (getline(inputStringStream, characters, ',')){
-                value = stod(characters);
-                p.setValue(i++, value);
-
-            }
+        std::string pointString;
+        for (int i = 0; i < p.__dim; i++) {
+            in >> pointString;
+            std::stringstream inputStringStream(pointString);
+            inputStringStream >> value;
+            p.__values[i] = value;
         }
         return in;
     }
-
 
 }

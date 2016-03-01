@@ -3,13 +3,16 @@
 //
 /*
 #include <iostream>
-
-
+#include <string>
+#include <sstream>
 #include "Cluster.h"
 
 namespace Clustering {
 
-    typedef Point * PointPtr;
+    LNode::LNode(const Point & p, LNodePtr n):point(p) {
+        point = p;
+        n = next;
+    }
 
     // ************
     // CONSTRUCTORS
@@ -18,7 +21,7 @@ namespace Clustering {
     // Default Constructor
     Cluster::Cluster() {
         __size = 0;
-        __points = NULL;
+        __points = nullptr;
     }
 
     // *********
@@ -28,12 +31,12 @@ namespace Clustering {
     // Copy Constructor
     Cluster::Cluster(const Cluster &clust) {
         if(&clust != this) {
-            if (clust.__points != NULL) {
+            if (clust.__points != nullptr) {
                 __size = 0;
 
             } else {
                 __size = 0;
-                __points = NULL;
+                __points = nullptr;
             }
         }
     }
@@ -53,20 +56,20 @@ namespace Clustering {
     // ****************
 
     // Accessors and Mutators
-    int getSize() const { // TODO add to the requirements
-
+    int Cluster::getSize() const { // TODO add to the requirements
+        return __size;
     }
 
     // Set functions: They allow calling c1.add(c2.remove(p));
-    void add(const Point &) { // TODO add asc order to the requirements
+    void Cluster::add(const Point &p) { // TODO add asc order to the requirements
 
     }
 
-    const Point &remove(const Point &) {
+    const Point &Cluster::remove(const Point &p) {
 
     }
 
-    bool contains(const Point &) {
+    bool Cluster::contains(const Point &p) {
 
     }
 
@@ -74,25 +77,25 @@ namespace Clustering {
     // Overloaded operators
 
     // Members: Subscript
-    const Point &operator[](unsigned int index) const {
+    const Point &Cluster::operator[](unsigned int index) const {
         // notice: const
     }
 
     // Members: Compound assignment (Point argument)
-    Cluster &operator+=(const Point &) {
+    Cluster &Cluster::operator+=(const Point &) {
 
     }
 
-    Cluster &operator-=(const Point &) {
+    Cluster &Cluster::operator-=(const Point &) {
 
     }
 
     // Members: Compound assignment (Cluster argument)
-    Cluster &operator+=(const Cluster &) {
+    Cluster &Cluster::operator+=(const Cluster &) {
         // union
     }
 
-    Cluster &operator-=(const Cluster &) {
+    Cluster &Cluster::operator-=(const Cluster &) {
         // (asymmetric) difference
     }
 
@@ -137,4 +140,4 @@ namespace Clustering {
     }
 
 }
- */
+*/
