@@ -70,12 +70,13 @@ namespace Clustering {
 
     }
 
+
     // Overloaded operators
 
     // Members: Subscript
     const Point &operator[](unsigned int index) const {
-
-    } // notice: const
+        // notice: const
+    }
 
     // Members: Compound assignment (Point argument)
     Cluster &operator+=(const Point &) {
@@ -88,42 +89,51 @@ namespace Clustering {
 
     // Members: Compound assignment (Cluster argument)
     Cluster &operator+=(const Cluster &) {
+        // union
+    }
 
-    } // union
     Cluster &operator-=(const Cluster &) {
+        // (asymmetric) difference
+    }
 
-    } // (asymmetric) difference
+    // *******
+    // FRIENDS
+    // *******
 
     // Friends: IO
-    friend std::ostream &operator<<(std::ostream &, const Cluster &) {
+    std::ostream &operator<<(std::ostream &, const Cluster &) {
 
     }
-    friend std::istream &operator>>(std::istream &, Cluster &) {
+
+    std::istream &operator>>(std::istream &, Cluster &) {
 
     }
 
     // Friends: Comparison
-    friend bool operator==(const Cluster &, const Cluster &) {
+    bool operator==(const Cluster &, const Cluster &) {
 
     }
-    friend bool operator!=(const Cluster &, const Cluster &) {
+
+    bool operator!=(const Cluster &, const Cluster &) {
 
     }
 
     // Friends: Arithmetic (Cluster and Point)
-    friend const Cluster operator+(const Cluster &, const Point &) {
+    const Cluster operator+(const Cluster &, const Point &) {
 
     }
-    friend const Cluster operator-(const Cluster &, const Point &) {
+
+    const Cluster operator-(const Cluster &, const Point &) {
 
     }
 
     // Friends: Arithmetic (two Clusters)
-    friend const Cluster operator+(const Cluster &, const Cluster &) {
+    const Cluster operator+(const Cluster &, const Cluster &) {
+        // union
+    }
 
-    } // union
-    friend const Cluster operator-(const Cluster &, const Cluster &) {
-
-    } // (asymmetric) difference
+    const Cluster operator-(const Cluster &, const Cluster &) {
+        // (asymmetric) difference
+    }
 
 }
