@@ -256,12 +256,12 @@ namespace Clustering {
 
     std::istream &operator>>(std::istream &in, Point &p) {
         int i = 0;
-        string content;
+        string pointString;
         string characters;
         double value;
-        while(getline(in, content)) {
-            stringstream contentIn(content);
-            while (getline(contentIn, characters, ',')){
+        while(getline(in, pointString)) {
+            stringstream inputStringStream(pointString);
+            while (getline(inputStringStream, characters, ',')){
                 value = stod(characters);
                 p.setValue(i++, value);
 
