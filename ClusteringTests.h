@@ -47,7 +47,7 @@ void test_point_distance(ErrorContext &ec, unsigned int numRuns);
 void test_point_IO(ErrorContext &ec, unsigned int numRuns);
 
 
-
+/*
 // - - - - - - - - - Tests: class Cluster - - - - - - - - - -
 
 // Smoketest: constructor, copy constructor, destructor
@@ -82,5 +82,5 @@ void test_cluster_SAO(ErrorContext &ec, unsigned int numRuns);
 
 // operator>>, operator<<
 void test_cluster_IO(ErrorContext &ec, unsigned int numRuns);
-
+*/
 #endif //CLUSTERING_CLUSTERINGTESTS_H
