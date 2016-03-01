@@ -4,7 +4,6 @@
 
 #include<iostream>
 #include<cmath>
-#include<string>
 #include<sstream>
 
 using std::sqrt;
@@ -16,8 +15,6 @@ using std::stod;
 
 #include"Point.h"
 namespace Clustering {
-
-    typedef Point * PointPtr;
 
     // Initialize ID Generator to 0
     unsigned int Point::__idGen = 0;
