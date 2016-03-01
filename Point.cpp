@@ -74,10 +74,11 @@ namespace Clustering {
 
     // Destructor
     Point::~Point() {
-        if (__values != NULL) {
+        if (__values) {
             delete[] __values;
+            __values = nullptr;
         }
-        __values = NULL;
+
     }
 
     // ****************

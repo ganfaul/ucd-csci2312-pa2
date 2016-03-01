@@ -1,7 +1,7 @@
 //
 // Created by Gannon Faul on 2/16/16.
 //
-
+/*
 #include <iostream>
 
 
@@ -26,9 +26,9 @@ namespace Clustering {
     // *********
 
     // Copy Constructor
-    Cluster::Cluster(const Cluster &c) {
-        if(&c != this) {
-            if (c.__points != NULL) {
+    Cluster::Cluster(const Cluster &clust) {
+        if(&clust != this) {
+            if (clust.__points != NULL) {
                 __size = 0;
 
             } else {
@@ -39,8 +39,8 @@ namespace Clustering {
     }
 
     // Operator Overload=
-    Cluster &Cluster::operator=(const Cluster &) {
-
+    Cluster &Cluster::operator=(const Cluster &clust) {
+        if
     }
 
     // Destructors
@@ -137,3 +137,4 @@ namespace Clustering {
     }
 
 }
+ */
