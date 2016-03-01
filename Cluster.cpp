@@ -1,7 +1,7 @@
 //
 // Created by Gannon Faul on 2/16/16.
 //
-/*
+
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -43,14 +43,14 @@ namespace Clustering {
 
     // Operator Overload=
     Cluster &Cluster::operator=(const Cluster &clust) {
-        if
+        if (true);
     }
 
     // Destructors
     Cluster::~Cluster() {
 
     }
-
+/*
     // ****************
     // MEMBER FUNCTIONS
     // ****************
@@ -138,6 +138,6 @@ namespace Clustering {
     const Cluster operator-(const Cluster &, const Cluster &) {
         // (asymmetric) difference
     }
+*/
 
 }
-*/
