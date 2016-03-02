@@ -9,11 +9,47 @@
 
 namespace Clustering {
 
-    LNode::LNode(const Point & p, LNodePtr n):point(p) {
-        point = p;
-        n = next;
+    LNode::LNode(const Point & p, LNodePtr n) : point(p), next(n){ }
+/*
+    // *********************
+    // FUNDAMENTAL FUNCTIONS
+    // *********************
+
+    void Cluster::__del() {
+        if (__size != 0 && __points != NULL) {
+            if (!(__points->next)) {
+                __size = 0;
+                delete __points;
+                return;
+            }
+            LNodePtr delPtr = __points;
+            LNodePtr delHelp = NULL;
+            while(delPtr) {
+                if (delPtr->next) {
+                    LNodePtr delHelp = delPtr->next;
+                }
+                delete delPtr;
+                delPtr = delHelp;
+            }
+            __size = 0;
+            return;
+        } else {
+            return;
+        }
     }
 
+    void Cluster::__cpy(LNodePtr pts) {
+        if (pts != NULL) {
+            LNodePtr cpyPtr = pts;
+            LNodePtr
+        }
+
+    }
+
+    bool __in(const Point &p) const {
+
+    }
+*/
     // ************
     // CONSTRUCTORS
     // ************
@@ -30,9 +66,10 @@ namespace Clustering {
 
     // Copy Constructor
     Cluster::Cluster(const Cluster &clust) {
-        if(&clust != this) {
+        if (&clust != this) {
             if (clust.__points != nullptr) {
                 __size = 0;
+                LNodePtr
 
             } else {
                 __size = 0;
@@ -43,26 +80,58 @@ namespace Clustering {
 
     // Operator Overload=
     Cluster &Cluster::operator=(const Cluster &clust) {
-        if (true);
+        __points = clust.__points;
+        __size = clust.__size;
     }
 
     // Destructors
     Cluster::~Cluster() {
-
+        LNodePtr delPtr;
+        while (__points) {
+            delPtr = __points;
+            __points = delPtr->next;
+            delete delPtr;
+        }
     }
-/*
+
     // ****************
     // MEMBER FUNCTIONS
     // ****************
 
     // Accessors and Mutators
-    int Cluster::getSize() const { // TODO add to the requirements
+    int Cluster::getSize() const {
         return __size;
     }
 
     // Set functions: They allow calling c1.add(c2.remove(p));
-    void Cluster::add(const Point &p) { // TODO add asc order to the requirements
-
+    void Cluster::add(const Point &p) {
+        if (__size != 0) {
+            if (!contains(p)) {
+                LNodePtr newNodePtr = __points;
+                LNodePtr nullCheck = nullptr;
+                while (newNodePtr) {
+                    if (p < newNodePtr->point) {
+                        if (nullCheck) {
+                            nullCheck->next = new LNode(p, newNodePtr);
+                            __size++;
+                            return;
+                        } else {
+                            __points = new LNode(p, newNodePtr);
+                            __size++;
+                            return;
+                        }
+                    }
+                    nullCheck = newNodePtr;
+                    newNodePtr = newNodePtr->next;
+                }
+            } else {
+                return;
+            }
+        } else {
+            __points = new LNode(p, nullptr);
+            __size++;
+            return;
+        }
     }
 
     const Point &Cluster::remove(const Point &p) {
@@ -70,7 +139,14 @@ namespace Clustering {
     }
 
     bool Cluster::contains(const Point &p) {
-
+        LNodePtr crossCheck = __points;
+        while(crossCheck) {
+            if(p.getId() == crossCheck->point.getId()) {
+                return true;
+            }
+            crossCheck = crossCheck->next;
+        }
+        return false;
     }
 
 

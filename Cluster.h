@@ -32,7 +32,7 @@ namespace Clustering {
         Cluster(const Cluster &);
         Cluster &operator=(const Cluster &);
         ~Cluster();
-/*
+
         // Getters/setters
         int getSize() const; // TODO add to the requirements
 
@@ -69,7 +69,7 @@ namespace Clustering {
         // Friends: Arithmetic (two Clusters)
         friend const Cluster operator+(const Cluster &, const Cluster &); // union
         friend const Cluster operator-(const Cluster &, const Cluster &); // (asymmetric) difference
-*/
+
     };
 
 }
