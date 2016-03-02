@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <string>
 #include <sstream>
 #include "Cluster.h"
 
@@ -131,14 +132,15 @@ namespace Clustering {
 
     // Destructors
     Cluster::~Cluster() {
-        if(__points) {
+        if(__points != nullptr) {
             LNodePtr delPtr = __points;
-            LNodePtr delHelp = delPtr->next;
+            LNodePtr delHelp = nullptr;
             for (int i = 0; i < __size; i++) {
-                delete delPtr;
-                delPtr = delHelp;
-                if (delPtr->next) {
-                    delHelp = delPtr->next;
+                if (__points != nullptr) {
+                   delHelp = delPtr->next;
+                   delete delPtr;
+                   delPtr = delHelp;
+
                 }
             }
         }
@@ -157,82 +159,91 @@ namespace Clustering {
 
     // Set functions: They allow calling c1.add(c2.remove(p));
     void Cluster::add(const Point &p) {
-        LNodePtr addPtr = __points;
-        if (addPtr) {
-            LNodePtr addHelp = addPtr->next;
-            LNodePtr location = nullptr;
-            if (addHelp) {
-                if (p < addPtr->point) {
-                    location = addPtr;
-                }
-                while (!location && addHelp) {
-                    if (p > addHelp->point) {
-                        addPtr = addHelp;
-                    } else {
-                        location = addHelp;
-                    }
-                    addHelp = addHelp->next;
-                }
+        LNodePtr addPtr = new LNode(p, nullptr);
+        if (!__points) {
+            __points = addPtr;
+            __size++;
+            return;
+        } else if (!__points->next) {
+            if(addPtr->point < __points->point){
+                addPtr->next = __points;
+                __points = addPtr;
+                __size++;
+                return;
             } else {
-                if (p < addPtr->point) {
-                    location = addPtr;
-                } else {
-                    location = addHelp;
-                }
+                __points->next = addPtr;
+                __size++;
+                return;
             }
-            addHelp = new LNode(p, location);
+        }
+        LNodePtr addHelp = __points->next;
+        LNodePtr holder = __points;
+        if(addPtr->point < __points->point){
+            __points = addPtr;
+            addPtr->next = holder;
+            __size++;
+            return;
+        } else if (addPtr->point < addHelp->point){
+            holder->next = addPtr;
             addPtr->next = addHelp;
             __size++;
-        } else {
-            addPtr = new LNode(p, nullptr);
-            __points = addPtr;
-            __size = 1;
+            return;
         }
-        return;
+        while (addHelp->next != nullptr) {
+            if (addPtr->point < addHelp->point){
+                holder = addPtr;
+                addPtr->next = holder;
+                __size++;
+                return;
+            }
+            addHelp = addHelp->next;
+            holder = holder->next;
+        }
+        addHelp->next = addPtr;
+        __size++;
     }
 
     const Point &Cluster::remove(const Point &p) {
         LNodePtr remPtr = __points;
-        if(remPtr){
-            if(remPtr->next) {
-                LNodePtr remHelp = remPtr->next;
+        if (remPtr->point == p) {
+
+            remPtr = __points;
+            if (__size > 0) {
+                __points = __points->next;
+                --__size;
+            }
+            delete remPtr;
+        } else {
+            int i = 0;
+            LNodePtr prev = remPtr;
+            remPtr = remPtr->next;
+
+            for (; i < __size; ++i) {
                 if (remPtr->point == p) {
-                    __points = remHelp;
-                    __size--;
-                    delete remPtr;
-                    return p;
-                } else {
-                    while (remHelp) {
-                        if(remHelp->point == p) {
-                            remPtr->next = remHelp->next;
-                            __size--;
-                            delete remHelp;
-                            return p;
-                        }
-                        remHelp = remHelp->next;
+                    if (remPtr->next == nullptr) {
+                        prev->next = nullptr;
+                        delete remPtr;
+                        __size--;
+                    } else {
+                        prev->next = remPtr->next;
                     }
                 }
-            } else {
-                if(remPtr->point == p) {
-                    delete remPtr;
-                    __size = 0;
-                    __points = nullptr;
-                    return p;
-                }
+                remPtr = remPtr->next;
+                prev = prev->next;
             }
         }
         return p;
     }
 
     bool Cluster::contains(const Point &p) {
-        LNodePtr crossCheck = __points;
-        while(crossCheck) {
-            if(p == crossCheck->point) {
-                return true;
+        LNodePtr containCheck = __points;
+        bool contain = false;
+        for(containCheck; containCheck != nullptr && !contain; containCheck = containCheck->next) {
+            if(containCheck->point == p) {
+                contain = true;
             }
-            crossCheck = crossCheck->next;
         }
-        return false;
+        return contain;
     }
 
 

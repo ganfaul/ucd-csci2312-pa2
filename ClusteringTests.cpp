@@ -935,9 +935,9 @@ void test_cluster_contain(ErrorContext &ec, unsigned int numRuns) {
                     pp[i] = 3.4 + i * 2.1 + i * i;
                 }
                 c.add(pp);
+
             }
             c.add(p);
-
             pass = c.contains(p);
 
             ec.result(pass);
