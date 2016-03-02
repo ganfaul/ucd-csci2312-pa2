@@ -205,18 +205,11 @@ namespace Clustering {
 
     const Point &Cluster::remove(const Point &p) {
         LNodePtr remPtr = __points;
-        if (remPtr->point == p) {
-            remPtr = __points;
-            if (__size > 0) {
-                __points = __points->next;
-                --__size;
-            }
-            delete remPtr;
-        } else {
+        if (__points->point != p) {
             LNodePtr remHelp = remPtr;
             remPtr = remPtr->next;
 
-            for (int i = 0; i < __size; ++i) {
+            for (int i = 0; i < __size; i++) {
                 if (remPtr->point == p) {
                     if (remPtr->next == nullptr) {
                         remHelp->next = nullptr;
@@ -229,6 +222,13 @@ namespace Clustering {
                 remPtr = remPtr->next;
                 remHelp = remHelp->next;
             }
+        } else {
+            remPtr = __points;
+            if (__size > 0) {
+                __points = __points->next;
+                --__size;
+            }
+            delete remPtr;
         }
         return p;
     }
