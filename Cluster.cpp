@@ -10,43 +10,44 @@
 namespace Clustering {
 
     LNode::LNode(const Point & p, LNodePtr n) : point(p), next(n){ }
-/*
+
     // *********************
     // FUNDAMENTAL FUNCTIONS
     // *********************
-
+/*
     void Cluster::__del() {
-        if (__size != 0 && __points != NULL) {
-            if (!(__points->next)) {
-                __size = 0;
-                delete __points;
-                return;
-            }
-            LNodePtr delPtr = __points;
-            LNodePtr delHelp = NULL;
-            while(delPtr) {
-                if (delPtr->next) {
-                    LNodePtr delHelp = delPtr->next;
-                }
+        LNodePtr delPtr = __points;
+        LNodePtr delHelp = nullptr;
+        while(__size > 0) {
+            if(__points) {
+                delHelp = delPtr->next;
                 delete delPtr;
                 delPtr = delHelp;
             }
-            __size = 0;
-            return;
-        } else {
-            return;
         }
+        __points = nullptr;
     }
 
     void Cluster::__cpy(LNodePtr pts) {
-        if (pts != NULL) {
-            LNodePtr cpyPtr = pts;
-            LNodePtr
+        if (pts) {
+            LNodePtr cpyPtr = nullptr;
+            LNodePtr ptr = NULL;
+            LNode *start = new LNode(pts->point, nullptr);
+            cpyPtr = pts->next;
+            __points = start;
+            LNodePtr cpyHelp = __points;
+
+            while(cpyPtr) {
+                cpyHelp->next = new LNode(cpyPtr->point, nullptr);
+                cpyHelp = cpyHelp->next;
+                cpyPtr = cpyHelp->next;
+            }
+
         }
 
     }
 
-    bool __in(const Point &p) const {
+    bool Cluster::__in(const Point &p) const {
 
     }
 */
@@ -66,40 +67,45 @@ namespace Clustering {
 
     // Copy Constructor
     Cluster::Cluster(const Cluster &clust) {
-        if (&clust != this) {
-            if (clust.__points != nullptr) {
-                __size = clust.__size;
-                LNodePtr cpyPtr = clust.__points;
-                __points = new LNode(cpyPtr->point, NULL);
-                LNodePtr nextPtr = NULL;
-                LNodePtr c = __points;
-                while(cpyPtr->next) {
-                    nextPtr = cpyPtr->next;
-                    c->next = new LNode(nextPtr->point, NULL);
-                    cpyPtr = nextPtr;
-                }
+        if(&clust != this) {
+            __size = clust.getSize();
+            if (__size != 0) {
+                __points = new LNode(clust.__points->point, nullptr);
 
+                LNodePtr cpyPtr = __points;
+                LNodePtr cpyHelp = cpyPtr;
+                LNodePtr nullCheck = clust.__points->next;
+                while (nullCheck) {
+                    cpyPtr = new LNode(nullCheck->point, nullptr);
+                    cpyHelp->next = cpyPtr;
+                    cpyHelp = cpyPtr;
+                    nullCheck = nullCheck->next;
+                }
             } else {
-                __size = 0;
                 __points = nullptr;
             }
         }
+
     }
 
     // Operator Overload=
     Cluster &Cluster::operator=(const Cluster &clust) {
-        __points = clust.__points;
-        __size = clust.__size;
+        if (this != &clust) {
+            if(__points) {
+                LNodePtr delPtr = __points;
+                int size;
+                while (delPtr) {
+                    delPtr = delPtr->next;
+                    size++;
+                }
+
+            }
+        }
     }
 
     // Destructors
     Cluster::~Cluster() {
-        LNodePtr delPtr;
-        while (__points) {
-            delPtr = __points;
-            __points = delPtr->next;
-            delete delPtr;
-        }
+
     }
 
     // ****************
@@ -143,13 +149,42 @@ namespace Clustering {
     }
 
     const Point &Cluster::remove(const Point &p) {
-
+        LNodePtr remPtr = __points;
+        if(remPtr){
+            if(remPtr->next) {
+                LNodePtr remHelp = remPtr->next;
+                if (remPtr->point == p) {
+                    __points = remHelp;
+                    __size--;
+                    delete remPtr;
+                    return p;
+                } else {
+                    while (remHelp) {
+                        if(remHelp->point == p) {
+                            remPtr->next = remHelp->next;
+                            __size--;
+                            delete remHelp;
+                            return p;
+                        }
+                        remHelp = remHelp->next;
+                    }
+                }
+            } else {
+                if(remPtr->point == p) {
+                    delete remPtr;
+                    __size = 0;
+                    __points = nullptr;
+                    return p;
+                }
+            }
+        }
+        return p;
     }
 
     bool Cluster::contains(const Point &p) {
         LNodePtr crossCheck = __points;
         while(crossCheck) {
-            if(p.getId() == crossCheck->point.getId()) {
+            if(p == crossCheck->point) {
                 return true;
             }
             crossCheck = crossCheck->next;
@@ -163,24 +198,54 @@ namespace Clustering {
     // Members: Subscript
     const Point &Cluster::operator[](unsigned int index) const {
         // notice: const
+        LNodePtr indexPtr = __points;
+        while (index > 0) {
+            indexPtr = indexPtr->next;
+            index--;
+        }
+        return indexPtr->point;
     }
 
     // Members: Compound assignment (Point argument)
-    Cluster &Cluster::operator+=(const Point &) {
-
+    Cluster &Cluster::operator+=(const Point &p) {
+        if (!(this->contains(p))) {
+            add(p);
+        }
+        return *this;
     }
 
-    Cluster &Cluster::operator-=(const Point &) {
-
+    Cluster &Cluster::operator-=(const Point &p) {
+        if (this->contains(p)) {
+            remove(p);
+        }
+        return *this;
     }
 
     // Members: Compound assignment (Cluster argument)
-    Cluster &Cluster::operator+=(const Cluster &) {
+    Cluster &Cluster::operator+=(const Cluster &c) {
         // union
+        LNodePtr cPtr = c.__points;
+        while (cPtr) {
+            if (this->contains(cPtr->point)) {
+                cPtr = cPtr->next;
+            } else {
+                add(cPtr->point);
+                cPtr = cPtr->next;
+            }
+        }
+        return *this;
     }
 
-    Cluster &Cluster::operator-=(const Cluster &) {
+    Cluster &Cluster::operator-=(const Cluster &c) {
         // (asymmetric) difference
+        LNodePtr cPtr = c.__points;
+        while (cPtr) {
+            if (this->contains(cPtr->point)) {
+                remove(cPtr->point);
+            }
+            cPtr = cPtr->next;
+        }
+        return *this;
     }
 
     // *******
@@ -188,40 +253,62 @@ namespace Clustering {
     // *******
 
     // Friends: IO
-    std::ostream &operator<<(std::ostream &, const Cluster &) {
+    std::ostream &operator<<(std::ostream &out, const Cluster &c) {
 
     }
 
-    std::istream &operator>>(std::istream &, Cluster &) {
+    std::istream &operator>>(std::istream &in, Cluster &c) {
 
     }
 
     // Friends: Comparison
-    bool operator==(const Cluster &, const Cluster &) {
-
+    bool operator==(const Cluster &lhs, const Cluster &rhs) {
+        if(lhs.getSize() == rhs.getSize()) {
+            LNodePtr lhsPtr = lhs.__points;
+            LNodePtr rhsPtr = rhs.__points;
+            while (lhsPtr && rhsPtr) {
+                if (lhsPtr->point != rhsPtr->point) {
+                    return false;
+                }
+                lhsPtr = lhsPtr->next;
+                rhsPtr = rhsPtr->next;
+            }
+            return true;
+        }
+        return false;
     }
 
-    bool operator!=(const Cluster &, const Cluster &) {
-
+    bool operator!=(const Cluster &lhs, const Cluster &rhs) {
+        return !(lhs == rhs);
     }
 
     // Friends: Arithmetic (Cluster and Point)
-    const Cluster operator+(const Cluster &, const Point &) {
-
+    const Cluster operator+(const Cluster &lhs, const Point &rhs) {
+        Cluster sum(lhs);
+        sum += rhs;
+        return sum;
     }
 
-    const Cluster operator-(const Cluster &, const Point &) {
-
+    const Cluster operator-(const Cluster &lhs, const Point &rhs) {
+        Cluster difference(lhs);
+        difference -= rhs;
+        return difference;
     }
 
     // Friends: Arithmetic (two Clusters)
-    const Cluster operator+(const Cluster &, const Cluster &) {
+    const Cluster operator+(const Cluster &lhs, const Cluster &rhs) {
         // union
+        Cluster sum(lhs);
+        sum += rhs;
+        return sum;
     }
 
-    const Cluster operator-(const Cluster &, const Cluster &) {
+    const Cluster operator-(const Cluster &lhs, const Cluster &rhs) {
         // (asymmetric) difference
+        Cluster difference(lhs);
+        difference -= rhs;
+        return difference;
     }
-*/
+
 
 }
