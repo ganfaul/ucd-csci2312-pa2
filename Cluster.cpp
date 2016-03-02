@@ -21,34 +21,11 @@ namespace Clustering {
     // *********************
 /*
     void Cluster::__del() {
-        LNodePtr delPtr = __points;
-        LNodePtr delHelp = nullptr;
-        while(__size > 0) {
-            if(__points) {
-                delHelp = delPtr->next;
-                delete delPtr;
-                delPtr = delHelp;
-            }
-        }
-        __points = nullptr;
+      
     }
 
     void Cluster::__cpy(LNodePtr pts) {
-        if (pts) {
-            LNodePtr cpyPtr = nullptr;
-            LNodePtr ptr = NULL;
-            LNode *start = new LNode(pts->point, nullptr);
-            cpyPtr = pts->next;
-            __points = start;
-            LNodePtr cpyHelp = __points;
-
-            while(cpyPtr) {
-                cpyHelp->next = new LNode(cpyPtr->point, nullptr);
-                cpyHelp = cpyHelp->next;
-                cpyPtr = cpyHelp->next;
-            }
-
-        }
+        
 
     }
 
