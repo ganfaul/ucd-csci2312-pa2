@@ -68,8 +68,16 @@ namespace Clustering {
     Cluster::Cluster(const Cluster &clust) {
         if (&clust != this) {
             if (clust.__points != nullptr) {
-                __size = 0;
-                LNodePtr
+                __size = clust.__size;
+                LNodePtr cpyPtr = clust.__points;
+                __points = new LNode(cpyPtr->point, NULL);
+                LNodePtr nextPtr = NULL;
+                LNodePtr c = __points;
+                while(cpyPtr->next) {
+                    nextPtr = cpyPtr->next;
+                    c->next = new LNode(nextPtr->point, NULL);
+                    cpyPtr = nextPtr;
+                }
 
             } else {
                 __size = 0;
