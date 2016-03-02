@@ -236,10 +236,11 @@ namespace Clustering {
     bool Cluster::contains(const Point &p) {
         LNodePtr containCheck = __points;
         bool contain = false;
-        for(containCheck; containCheck != nullptr && !contain; containCheck = containCheck->next) {
+        while (containCheck) {
             if(containCheck->point == p) {
                 contain = true;
             }
+            containCheck = containCheck->next;
         }
         return contain;
     }
@@ -317,20 +318,6 @@ namespace Clustering {
     }
 
     std::istream &operator>>(std::istream &in, Cluster &c) {
-        string content;
-        string foo;
-        PointPtr p = nullptr;
-        while (getline(in, content)) {
-            int dimensions = 0;
-            stringstream inputStringStream(content);
-            stringstream inputStringStream2(content);
-            while (getline(inputStringStream, foo, ',')) {
-                dimensions++;
-            }
-            p = new Point(dimensions);
-            inputStringStream2 >> *p;
-            c.add(*p);
-        }
         return in;
     }
 
