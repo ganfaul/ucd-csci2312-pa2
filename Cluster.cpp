@@ -3,11 +3,15 @@
 //
 
 #include <iostream>
-#include <string>
 #include <sstream>
 #include "Cluster.h"
 
+using std::string;
+using std::stringstream;
+
 namespace Clustering {
+
+    typedef Point * PointPtr;
 
     LNode::LNode(const Point & p, LNodePtr n) : point(p), next(n){ }
 
@@ -121,8 +125,8 @@ namespace Clustering {
             } else {
                 __points = nullptr;
             }
-
         }
+        return *this;
     }
 
     // Destructors
@@ -238,9 +242,10 @@ namespace Clustering {
     const Point &Cluster::operator[](unsigned int index) const {
         // notice: const
         LNodePtr indexPtr = __points;
-        while (index > 0) {
-            indexPtr = indexPtr->next;
-            index--;
+        if(index != 0) {
+            for (int i = 0; i < index; i++) {
+                indexPtr = indexPtr->next;
+            }
         }
         return indexPtr->point;
     }
@@ -293,11 +298,31 @@ namespace Clustering {
 
     // Friends: IO
     std::ostream &operator<<(std::ostream &out, const Cluster &c) {
-
+        LNodePtr outPtr = c.__points;
+        while (outPtr) {
+            out << outPtr->point;
+            out << std::endl;
+            outPtr = outPtr->next;
+        }
+        return out;
     }
 
     std::istream &operator>>(std::istream &in, Cluster &c) {
-
+        string content;
+        string foo;
+        PointPtr p = nullptr;
+        while (getline(in, content)) {
+            int dimensions = 0;
+            stringstream inputStringStream(content);
+            stringstream inputStringStream2(content);
+            while (getline(inputStringStream, foo, ',')) {
+                dimensions++;
+            }
+            p = new Point(dimensions);
+            inputStringStream2 >> *p;
+            c.add(*p);
+        }
+        return in;
     }
 
     // Friends: Comparison
